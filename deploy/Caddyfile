@@ -1,0 +1,40 @@
+{
+	# Caddy's local CA is used when no real certificate is given.
+	skip_install_trust
+}
+
+# Plain HTTP: only the CA download (needed by iOS/Android before HTTPS is trusted); everything else goes to HTTPS.
+http://{$OFFICE_HOST} {
+	handle /ca.crt {
+		root * /data/caddy/pki/authorities/local
+		rewrite * /root.crt
+		header Content-Type application/x-x509-ca-cert
+		header Content-Disposition `attachment; filename="office3d-root-ca.crt"`
+		file_server
+	}
+	handle {
+		redir https://{host}{uri} permanent
+	}
+}
+
+https://{$OFFICE_HOST} {
+	tls {$TLS_CERT_FILE:internal} {$TLS_KEY_FILE:}
+	encode zstd gzip
+
+	handle /ca.crt {
+		root * /data/caddy/pki/authorities/local
+		rewrite * /root.crt
+		header Content-Type application/x-x509-ca-cert
+		header Content-Disposition `attachment; filename="office3d-root-ca.crt"`
+		file_server
+	}
+	handle /api/* {
+		reverse_proxy server:3000
+	}
+	handle /socket.io/* {
+		reverse_proxy server:3000
+	}
+	handle {
+		reverse_proxy web:80
+	}
+}

@@ -1,0 +1,19 @@
+{
+  "name": "office3d",
+  "private": true,
+  "packageManager": "pnpm@12.11.2",
+  "scripts": {
+    "dev:server": "pnpm --filter @office3d/server dev",
+    "dev:web": "pnpm --filter @office3d/web dev",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r --filter '!@office3d/e2e' --if-present test",
+    "e2e": "pnpm --filter @office3d/e2e test",
+    "e2e:up": "docker compose -p office3d-test --env-file .env.test -f docker-compose.yml -f docker-compose.test.yml up -d --build --wait",
+    "e2e:down": "docker compose -p office3d-test --env-file .env.test -f docker-compose.yml -f docker-compose.test.yml down -v",
+    "e2e:isolated": "pnpm e2e:up && E2E_ALLOW_DESTRUCTIVE=1 BASE_URL=https://localhost:18443 pnpm e2e; s=$?; pnpm e2e:down; exit $s"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

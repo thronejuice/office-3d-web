@@ -1,0 +1,12 @@
+FROM node:22-slim AS build
+RUN corepack enable
+WORKDIR /app
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml tsconfig.base.json ./
+COPY packages/shared packages/shared
+COPY apps/web apps/web
+RUN pnpm install --frozen-lockfile --filter @office3d/web...
+RUN pnpm --filter @office3d/web build
+
+FROM caddy:2-alpine
+COPY deploy/web.Caddyfile /etc/caddy/Caddyfile
+COPY --from=build /app/apps/web/dist /srv

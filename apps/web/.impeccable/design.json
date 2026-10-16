@@ -1,0 +1,353 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-15T11:14:22.398293Z",
+  "title": "Design System: Office3D",
+  "extensions": {
+    "colorMeta": {
+      "signal-blue": {
+        "role": "primary",
+        "displayName": "Signal Blue",
+        "canonical": "#3b6cf6",
+        "tonalRamp": [
+          "#031649",
+          "#06267f",
+          "#0835b4",
+          "#0b45ea",
+          "#3c6df6",
+          "#7699f9",
+          "#b1c4fb",
+          "#e7edfe"
+        ]
+      },
+      "busy-amber": {
+        "role": "secondary",
+        "displayName": "Busy Amber",
+        "canonical": "#f2a93b",
+        "tonalRamp": [
+          "#482d05",
+          "#7c4e08",
+          "#b16f0c",
+          "#e6900f",
+          "#f2ab40",
+          "#f6c479",
+          "#faddb2",
+          "#fdf5e7"
+        ]
+      },
+      "presence-green": {
+        "role": "tertiary",
+        "displayName": "Presence Green",
+        "canonical": "#2fbf71",
+        "tonalRamp": [
+          "#0f3d24",
+          "#1a6a3f",
+          "#25975a",
+          "#30c474",
+          "#5bd794",
+          "#8ce3b4",
+          "#beefd4",
+          "#ebfaf2"
+        ]
+      },
+      "dnd-red": {
+        "role": "tertiary",
+        "displayName": "DND Red",
+        "canonical": "#e5484d",
+        "tonalRamp": [
+          "#430a0b",
+          "#741014",
+          "#a5171c",
+          "#d61e24",
+          "#e64c51",
+          "#ed8285",
+          "#f5b8ba",
+          "#fce9e9"
+        ]
+      },
+      "away-gray": {
+        "role": "tertiary",
+        "displayName": "Away Gray",
+        "canonical": "#98a1b0",
+        "tonalRamp": [
+          "#21252b",
+          "#3a404b",
+          "#525b6b",
+          "#6a768b",
+          "#8c96a6",
+          "#aeb5c1",
+          "#d1d5dc",
+          "#f1f2f4"
+        ]
+      },
+      "sky-ink": {
+        "role": "neutral",
+        "displayName": "Sky Ink",
+        "canonical": "#1d2433",
+        "tonalRamp": [
+          "#1c2231",
+          "#303c55",
+          "#445578",
+          "#596e9c",
+          "#7d8fb5",
+          "#a4b0cb",
+          "#cbd2e1",
+          "#eff1f6"
+        ]
+      },
+      "slate-muted": {
+        "role": "neutral",
+        "displayName": "Slate Muted",
+        "canonical": "#586474",
+        "tonalRamp": [
+          "#21252b",
+          "#39414b",
+          "#515c6b",
+          "#6a788b",
+          "#8b97a7",
+          "#aeb6c1",
+          "#d1d5dc",
+          "#f0f2f4"
+        ]
+      },
+      "cloud-bg": {
+        "role": "neutral",
+        "displayName": "Cloud Background",
+        "canonical": "#f3f5f9",
+        "tonalRamp": [
+          "#192233",
+          "#2c3b58",
+          "#3f547e",
+          "#526da3",
+          "#778ebb",
+          "#a0b0cf",
+          "#c9d2e4",
+          "#eef1f7"
+        ]
+      },
+      "paper-surface": {
+        "role": "neutral",
+        "displayName": "Paper Surface",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5e5e5e",
+          "#7a7a7a",
+          "#999999",
+          "#b8b8b8",
+          "#d6d6d6",
+          "#f2f2f2"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#dde2ea",
+        "tonalRamp": [
+          "#1d242f",
+          "#333f52",
+          "#485975",
+          "#5d7497",
+          "#8193b1",
+          "#a7b4c8",
+          "#cdd4e0",
+          "#eff2f5"
+        ]
+      },
+      "coral-danger": {
+        "role": "neutral",
+        "displayName": "Coral Danger",
+        "canonical": "#c9354e",
+        "tonalRamp": [
+          "#3d1017",
+          "#691c29",
+          "#95273a",
+          "#c2334b",
+          "#d45e72",
+          "#e18e9c",
+          "#eebec6",
+          "#faebed"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "body": {
+        "displayName": "Body",
+        "purpose": "All running text and controls."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Panel and page titles."
+      },
+      "tag": {
+        "displayName": "Tag",
+        "purpose": "In-world name tags and hover cards."
+      }
+    },
+    "shadows": [
+      {
+        "name": "small",
+        "value": "0 1px 4px rgba(0,0,0,.15)",
+        "purpose": "Name tags, bubbles, joystick knob."
+      },
+      {
+        "name": "pill",
+        "value": "0 2px 10px rgba(0,0,0,.12)",
+        "purpose": "Top-bar pills, round buttons."
+      },
+      {
+        "name": "medium",
+        "value": "0 4px 16px rgba(0,0,0,.18)",
+        "purpose": "Toasts."
+      },
+      {
+        "name": "large",
+        "value": "0 8px 30px rgba(0,0,0,.2)",
+        "purpose": "Menu, hover card, desk editor, mobile drawer."
+      },
+      {
+        "name": "panel",
+        "value": "0 8px 30px rgba(29,36,51,.14)",
+        "purpose": "Login and customizer panels."
+      },
+      {
+        "name": "drawer",
+        "value": "-6px 0 24px rgba(0,0,0,.14)",
+        "purpose": "Right-hand drawer."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tablet",
+        "value": "720px"
+      },
+      {
+        "name": "phone",
+        "value": "600px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main action (save, enter office).",
+      "html": "<button class=\"ds-btn-primary\">เข้าออฟฟิศ</button>",
+      "css": ".ds-btn-primary{background:#3b6cf6;color:#fff;border:1px solid #3b6cf6;border-radius:10px;padding:8px 14px;min-height:44px;font:inherit;cursor:pointer}.ds-btn-primary:hover{border-color:#1d2433}.ds-btn-primary:focus-visible{outline:2px solid #3b6cf6;outline-offset:2px}"
+    },
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Secondary action.",
+      "html": "<button class=\"ds-btn\">ยกเลิก</button>",
+      "css": ".ds-btn{background:#fff;color:#1d2433;border:1px solid #dde2ea;border-radius:10px;padding:8px 14px;min-height:44px;font:inherit;cursor:pointer}.ds-btn:hover{border-color:#3b6cf6}.ds-btn:focus-visible{outline:2px solid #3b6cf6;outline-offset:2px}"
+    },
+    {
+      "name": "Status Pill",
+      "kind": "nav",
+      "refersTo": "pill",
+      "description": "Top-bar status and online count.",
+      "html": "<button class=\"ds-pill\"><span class=\"ds-dot\"></span> ว่าง · 5</button>",
+      "css": ".ds-pill{background:#fff;color:#1d2433;border:1px solid #dde2ea;border-radius:999px;padding:8px 14px;min-height:44px;box-shadow:0 2px 10px rgba(0,0,0,.12);font:inherit;cursor:pointer}.ds-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#2fbf71;vertical-align:middle}"
+    },
+    {
+      "name": "Segment Chip",
+      "kind": "chip",
+      "refersTo": "button",
+      "description": "Selected state uses Signal Blue Soft.",
+      "html": "<button class=\"ds-chip\">ไม่ว่าง</button>",
+      "css": ".ds-chip{background:#eef2ff;color:#1d2433;border:1px solid #3b6cf6;border-radius:10px;padding:6px 14px;min-height:44px;font:inherit;cursor:pointer}"
+    },
+    {
+      "name": "Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Text field with label above.",
+      "html": "<label class=\"ds-label\">ชื่อผู้ใช้<input class=\"ds-input\" value=\"alice\"></label>",
+      "css": ".ds-label{display:block;font-size:.9rem;color:#586474}.ds-input{display:block;width:100%;margin-top:4px;border:1px solid #dde2ea;border-radius:10px;padding:9px 12px;min-height:44px;background:#fff;color:#1d2433;font:inherit}.ds-input:focus-visible{outline:2px solid #3b6cf6;outline-offset:1px}"
+    },
+    {
+      "name": "Hover Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Avatar card with walk-to and knock.",
+      "html": "<div class=\"ds-card\"><strong>อลิส</strong><div class=\"ds-m\">ฝ่ายขาย</div><div class=\"ds-r\"><button class=\"ds-b\">เดินไปหา</button><button class=\"ds-b\">เคาะเรียก</button></div></div>",
+      "css": ".ds-card{width:220px;background:#fff;border-radius:14px;padding:12px;box-shadow:0 8px 30px rgba(0,0,0,.2);font-size:13px;display:flex;flex-direction:column;gap:6px;color:#1d2433}.ds-m{color:#586474}.ds-r{display:flex;gap:8px}.ds-b{flex:1;min-height:44px;background:#fff;border:1px solid #dde2ea;border-radius:10px;font:inherit;cursor:pointer}"
+    },
+    {
+      "name": "Name Tag",
+      "kind": "custom",
+      "refersTo": "pill",
+      "description": "In-world label over an avatar.",
+      "html": "<div class=\"ds-tag\"><span class=\"ds-d\"></span>อลิส</div>",
+      "css": ".ds-tag{display:inline-flex;gap:6px;align-items:center;background:#fff;border-radius:999px;padding:3px 10px;font-size:13px;box-shadow:0 1px 4px rgba(0,0,0,.15);color:#1d2433}.ds-d{width:10px;height:10px;border-radius:50%;background:#2fbf71}"
+    },
+    {
+      "name": "Toast",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Transient notice with action.",
+      "html": "<div class=\"ds-toast\"><span>อลิสเคาะเรียกคุณ</span><button class=\"ds-tb\">ไปหา</button></div>",
+      "css": ".ds-toast{background:#1d2433;color:#fff;border-radius:12px;padding:10px 12px;display:flex;gap:8px;align-items:center;box-shadow:0 4px 16px rgba(0,0,0,.18)}.ds-toast span{flex:1}.ds-tb{min-height:44px;padding:6px 12px;border-radius:10px;border:1px solid #dde2ea;background:#fff;color:#1d2433;font:inherit}"
+    }
+  ],
+  "narrative": {
+    "northStar": "ประตูกระจกสู่ออฟฟิศ (The Glass Door to the Office)",
+    "overview": "The 3D isometric office is the content; everything in 2D is a light, rounded layer floating in front of it. Controls are soft, friendly and easy to hit with a thumb, and stay out of the way of the scene.",
+    "keyCharacteristics": [
+      "Soft rounded rectangles (10–18px) and full pills for persistent controls.",
+      "One accent (Signal Blue), four presence colors, everything else neutral.",
+      "Every interactive element is at least 44×44px.",
+      "Soft layered shadows only; borders are one-pixel hairlines.",
+      "Status is always shape + color + text, never color alone."
+    ],
+    "rules": [
+      {
+        "name": "The One Voice Rule",
+        "body": "Signal Blue is the only accent; selected, primary and focus all use it.",
+        "section": "colors"
+      },
+      {
+        "name": "The Presence Colors Are Not Decoration Rule",
+        "body": "Green, amber, red and gray mean status only.",
+        "section": "colors"
+      },
+      {
+        "name": "The Token Rule",
+        "body": "Colors come from tokens; no new literal hex in component CSS.",
+        "section": "colors"
+      },
+      {
+        "name": "The Offline Font Rule",
+        "body": "Fonts ship in the build; nothing loads from a CDN.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tone-Mark Rule",
+        "body": "Never set Thai text tighter than normal line height or clip it with tight fixed heights.",
+        "section": "typography"
+      },
+      {
+        "name": "The Float, Don't Stack Rule",
+        "body": "Only one shadowed layer over the scene per region; no shadows nested in shadows.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use var(--surface), --ink, --muted, --line, --accent and --accent-soft for any new UI, and add dark values for any new token.",
+      "Do keep every touch target at least 44×44px.",
+      "Do pair every status color with its shape and a text/aria label.",
+      "Do keep all copy in src/strings.th.ts.",
+      "Do keep mobile panels clear of the joystick (144px bottom clearance)."
+    ],
+    "donts": [
+      "Don't introduce a second accent color or reuse presence colors decoratively.",
+      "Don't load fonts, icons or images from the internet.",
+      "Don't add backdrop-filter or blur to chrome; the 3D scene is the performance budget.",
+      "Don't nest shadowed cards inside shadowed panels.",
+      "Don't convey state by color alone, and don't disable pinch zoom."
+    ]
+  }
+}

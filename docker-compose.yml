@@ -1,0 +1,64 @@
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      OFFICE_HOST: ${OFFICE_HOST:?set OFFICE_HOST in .env}
+      TLS_CERT_FILE: ${TLS_CERT_FILE:-internal}  # "internal" = Caddy local CA
+      TLS_KEY_FILE: ${TLS_KEY_FILE:-}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./certs:/certs:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on: [web, server]
+
+  web:
+    build: { context: ., dockerfile: deploy/Dockerfile.web }
+    restart: unless-stopped
+
+  server:
+    build: { context: ., dockerfile: deploy/Dockerfile.server }
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://office:${POSTGRES_PASSWORD:?}@postgres:5432/office
+      INITIAL_ADMIN_USERNAME: ${INITIAL_ADMIN_USERNAME:-admin}
+      INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD:?}
+      TURN_HOST: ${LAN_IP:?set LAN_IP in .env}
+      TURN_SECRET: ${TURN_SECRET:?}
+    depends_on:
+      postgres: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      retries: 5
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: office
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      POSTGRES_DB: office
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U office"]
+      interval: 5s
+      retries: 10
+
+  # Host networking: a TURN relay needs a range of UDP ports; mapping them through Docker's NAT is fragile.
+  coturn:
+    image: coturn/coturn:4.6
+    restart: unless-stopped
+    network_mode: host
+    command: >
+      -n --log-file=stdout --realm=office3d --fingerprint
+      --use-auth-secret --static-auth-secret=${TURN_SECRET:?}
+      --listening-ip=${LAN_IP:?} --relay-ip=${LAN_IP:?} --listening-port=3478
+      --min-port=49160 --max-port=49200 --no-tls --no-dtls --no-cli
+
+volumes:
+  pgdata:
+  caddy-data:
+  caddy-config:

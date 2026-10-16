@@ -1,0 +1,8 @@
+# Isolated stack for end-to-end tests: own project name (so own database volume), own ports, no TURN relay.
+#   pnpm e2e:isolated      build, start, run the tests, delete everything
+# The tests reset the map and create users, so they must never run against the stack people actually use.
+services:
+  caddy:
+    ports: !override ["18080:80", "18443:443"]
+  coturn:
+    profiles: ["turn"]
