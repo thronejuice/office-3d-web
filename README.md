@@ -3,7 +3,61 @@
 ออฟฟิศเสมือน 3 มิติสำหรับใช้ภายในบริษัท (แนว Gather.town): พนักงานล็อกอิน เดินในออฟฟิศมุมไอโซเมตริก และคุยด้วยเสียงกับคนที่อยู่ใกล้ — เสียงเท่านั้น ไม่มีวิดีโอ/แชต
 
 A self-hosted 3D virtual office with proximity voice for ≤ ~20 people on a company LAN/VPN.
-Stack: pnpm monorepo · React + react-three-fiber · Fastify + Socket.IO · PostgreSQL (Drizzle) · WebRTC audio mesh · coturn · Caddy.
+
+Repository: <https://github.com/thronejuice/office-3d-web>
+
+## Features
+
+**Office and movement**
+* Isometric 3D office rendered with React Three Fiber; every player is a procedural "Chibi" avatar with idle, walk, sit, blink, speaking and emote animations.
+* Move by clicking the floor or with the keyboard; paths are found with A* (shared between client and server).
+* Furniture, wall art and TV screens are placed from the map; players can sit at desks and edit their own desk.
+* Name tags and camera follow are handled per frame without React re-renders.
+
+**Proximity voice**
+* Voice is a WebRTC audio mesh: you hear people near you, and volume falls off with distance.
+* Zones and walls block audio, so people in different rooms do not hear each other.
+* Do-not-disturb (DND) mutes incoming audio; per-person mute is available.
+* Knock on a player to ask them to talk; knocks you miss are kept until you clear them.
+* TURN relay (coturn) with time-limited credentials for clients that cannot connect directly.
+
+**Presence and social**
+* Status: `available`, `busy`, `dnd`, `away`. The client goes `away` when the tab is hidden or after 10 minutes idle.
+* Emotes: wave, clap, thumbs-up, and raise hand.
+* Avatar customization in the Customizer panel (saved per user).
+
+**Zones and games**
+* Map zones have a kind: meeting, music or game. Set them in the Map Editor.
+* Music zones play a nature loop (rain, forest with birds, sea, stream) only to people standing in them.
+* Game tables are server-authoritative and kept in memory: Texas Hold'em, Chess, Uno, Pok Deng and Bingo. Poker chips are play money handed out on sitting.
+* Rules and decisions: [SPEC-ZONES.md](SPEC-ZONES.md).
+
+**Accounts and admin**
+* Login with username and password (Argon2 hashes). Sessions use an httpOnly cookie; only a SHA-256 of the token is stored.
+* Login is rate-limited per username and per IP.
+* The first admin is created from `.env`. The first login forces a password change.
+* Admin (`/admin`): list users, create users, and reset passwords (a reset also logs the user out).
+* Map Editor (`/admin/map`): edit a draft, publish it, and roll back to an earlier version. Only admins can use it.
+* The UI is in Thai (`apps/web/src/strings.th.ts`).
+
+**Deployment**
+* Docker Compose stack: Caddy (HTTPS and reverse proxy), web (static build), server, PostgreSQL and coturn.
+* Caddy signs the site with its own internal CA by default; a real certificate can be used instead.
+
+## Technology
+
+| Layer | Technology |
+|---|---|
+| Language | TypeScript 5.6 across all packages |
+| Monorepo | pnpm workspaces (`apps/web`, `apps/server`, `packages/shared`, `e2e`) |
+| Client | React 19, Vite 6, React Three Fiber 9, drei 10, Three.js 0.172, Zustand 5, socket.io-client 4.8, `@fontsource/noto-sans-thai` |
+| Server | Node.js, Fastify 5, `@fastify/cookie`, Socket.IO 4.8, Zod 3 |
+| Data | PostgreSQL with Drizzle ORM 0.38 (`pg` driver); migrations in `apps/server/drizzle`; Argon2 for passwords |
+| Realtime voice | WebRTC audio mesh, coturn (TURN) |
+| Infrastructure | Docker Compose, Caddy (internal CA or your own cert) |
+| Tests | Vitest 2 (unit), Playwright (end-to-end with fake microphones) |
+
+Shared code lives in `packages/shared`: types, the protocol, the map schema (Zod), A*, voice rules and audio constants.
 
 ```
 apps/web         Vite + React + R3F client (Thai UI: src/strings.th.ts)
@@ -14,11 +68,13 @@ deploy           Caddyfile, Dockerfiles
 docs             Thai IT guide for the HTTPS certificate
 ```
 
-## Deploy (Docker Compose)
+## Installation (Deploy with Docker Compose)
 
 Requirements: a Linux server with Docker + Compose v2, reachable only from the LAN/VPN.
 
 ```bash
+git clone https://github.com/thronejuice/office-3d-web.git office3d
+cd office3d
 cp .env.example .env      # then edit it (see below)
 docker compose up -d --build
 ```
@@ -61,18 +117,28 @@ The map and all versions, users and avatars live in this database. Caddy's CA li
 * Logs: `docker compose logs -f server`.
 * Admin UI: `/admin` (users), `/admin/map` (map editor). Both are admin-only.
 
-## Music zones and game tables
+## Usage
 
-Zones have a kind (meeting / music / game), set in the Map Editor (`/admin/map` → zone tool). Music zones play a nature loop (rain, forest + birds, sea, stream) only for people standing in them. Game tables are the "โต๊ะเกม" furniture item: players walk up, sit, and play Texas Hold'em, chess, Uno, Pok Deng or Bingo (server-authoritative, kept in memory; poker chips are play money). Details and rules: [SPEC-ZONES.md](SPEC-ZONES.md); sound sources and licenses: [ASSETS.md](ASSETS.md).
+1. Open `https://<OFFICE_HOST>` on a device that trusts the CA, and log in.
+2. Change the password when prompted.
+3. Click the floor or use the arrow keys / WASD to walk. Players within earshot can talk to you automatically.
+4. Set your status (`busy`, `dnd`, ...), send an emote, or knock on a player.
+5. Walk to a game table to sit down and play, or into a music zone to hear its loop.
+6. Customize your avatar and desk from the in-game panels.
+7. Admins: manage users at `/admin` and edit the office at `/admin/map`.
 
 ## Development
 
 ```bash
+git clone https://github.com/thronejuice/office-3d-web.git office3d
+cd office3d
 pnpm install
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d postgres     # needs .env
 DATABASE_URL=postgres://office:$POSTGRES_PASSWORD@localhost:5432/office INITIAL_ADMIN_PASSWORD=dev-admin-pw pnpm dev:server
 pnpm dev:web              # http://localhost:5173 (localhost counts as a secure context, mic works)
 ```
+
+Requirements: Node.js and pnpm (the repo pins `pnpm@12.11.2`), Docker for PostgreSQL.
 
 ## Tests
 
@@ -87,4 +153,17 @@ The e2e suite uses fake microphones and asserts real peer connections (open/clos
 
 **The e2e tests are destructive** (they reset the map to the seed and create users), so they never run against the stack people use. `pnpm e2e:isolated` builds a separate Compose project (`office3d-test`: its own database volume, `https://localhost:18443`, no TURN relay, values from `.env.test`), runs the suite and deletes the stack afterwards. `pnpm e2e:up` / `pnpm e2e:down` start and remove it by hand. `pnpm e2e` on its own refuses to start unless `E2E_ALLOW_DESTRUCTIVE=1` is set, which is only meant for a stack you can throw away.
 
-More: [DECISIONS.md](DECISIONS.md) (every choice not fixed by the spec, and known gaps) · [ASSETS.md](ASSETS.md) (3D assets, fonts, licenses).
+## Known limits
+
+* Frame rate on real phones and laptops has not been measured; see [DECISIONS.md](DECISIONS.md).
+* iPhone and Safari/Firefox were not tested on real hardware.
+* Login rate limits are kept in server memory, which is fine for a single server instance.
+* Game tables are in memory and reset when the server restarts.
+
+## More
+
+* [DECISIONS.md](DECISIONS.md): every choice not fixed by the spec, and known gaps
+* [SPEC-ZONES.md](SPEC-ZONES.md): zones, music, and game table rules
+* [SPEC-AVATAR.md](SPEC-AVATAR.md): avatar design spec
+* [ASSETS.md](ASSETS.md): 3D assets, fonts, licenses
+* [docs/IT-GUIDE.th.md](docs/IT-GUIDE.th.md): HTTPS certificate guide for IT (Thai)
