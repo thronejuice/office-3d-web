@@ -53,6 +53,10 @@ export const T = {
   entering: 'กำลังเข้าออฟฟิศ…',
   moreActions: 'บัญชีและการตั้งค่า',
   adminTools: 'สำหรับผู้ดูแล',
+  versionLabel: (v: string) => `เวอร์ชัน ${v}`,
+  versionsTitle: 'ประวัติเวอร์ชัน',
+  versionCurrent: 'ปัจจุบัน',
+  whatsNew: 'มีอะไรใหม่',
 
   // zones & games
   zoneKinds: { meeting: 'ห้องประชุม', music: 'ฟังเพลง', game: 'เล่นเกม' } as Record<string, string>,

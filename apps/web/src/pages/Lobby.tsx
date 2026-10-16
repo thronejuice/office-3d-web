@@ -8,6 +8,12 @@ import { ChangePassword, refreshMe } from './Auth';
 import { voice } from '../game/voice';
 import { connectOffice } from '../game/net';
 import { navigate } from '../router';
+import { CHANGELOG, CURRENT_VERSION } from '../changelog';
+import { Modal } from '../ui/Modal';
+
+const SEEN_KEY = 'office3d.seenVersion';
+const seenVersion = () => { try { return localStorage.getItem(SEEN_KEY); } catch { return null; } };
+const markSeen = () => { try { localStorage.setItem(SEEN_KEY, CURRENT_VERSION); } catch { /* private mode: notes show again next time */ } };
 
 const LobbyBackdrop = lazy(() => import('../ui/LobbyBackdrop'));
 
@@ -57,7 +63,9 @@ export function Lobby() {
   const [changingPw, setChangingPw] = useState(false);
   const [busy, setBusy] = useState(false);
   const [map, setMap] = useState<MapData | null>(null);
+  const [showNews, setShowNews] = useState(() => seenVersion() !== CURRENT_VERSION);
   const mic = useMicPre();
+  const closeNews = () => { markSeen(); setShowNews(false); };
 
   useEffect(() => { api<{ map: MapData }>('GET', '/api/map').then((r) => setMap(r.map)).catch(() => {}); }, []);
 
@@ -107,13 +115,25 @@ export function Lobby() {
             <div className="row">
               <button className="secondary" onClick={() => navigate('/admin')}><span aria-hidden="true">👥</span> {T.adminPanel}</button>
               <button className="secondary" onClick={() => navigate('/admin/map')}><span aria-hidden="true">🗺️</span> {T.mapEditor}</button>
+              <button className="secondary" onClick={() => navigate('/admin/versions')}><span aria-hidden="true">📜</span> {T.versionsTitle}</button>
             </div>
           </>
         )}
         <div className="row end">
+          <button className="ghost small" onClick={() => setShowNews(true)}>{T.versionLabel(CURRENT_VERSION)}</button>
           <button className="danger" onClick={async () => { await api('POST', '/api/auth/logout'); await refreshMe(); }}><span aria-hidden="true">🚪</span> {T.logout}</button>
         </div>
       </div>
+      {showNews && (
+        <Modal onClose={closeNews} titleId="whats-new-heading">
+          <div className="panel">
+            <h1 id="whats-new-heading">{T.whatsNew} · {T.versionLabel(CURRENT_VERSION)}</h1>
+            <h3>{CHANGELOG[0].title}</h3>
+            <ul>{CHANGELOG[0].notes.map((n) => <li key={n}>{n}</li>)}</ul>
+            <div className="row end"><button className="primary" onClick={closeNews}>{T.close}</button></div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

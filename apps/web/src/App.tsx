@@ -13,6 +13,7 @@ import { deskEditClick } from './game/deskEdit';
 
 const Admin = lazy(() => import('./pages/Admin'));
 const MapEditor = lazy(() => import('./pages/MapEditor'));
+const Versions = lazy(() => import('./pages/Versions'));
 
 function Office() {
   useOfficeInput();
@@ -51,5 +52,6 @@ export function App() {
   if (inOffice) return <Office />;
   if (me.role === 'admin' && path === '/admin') return <Suspense fallback={T.loading}><Admin /></Suspense>;
   if (me.role === 'admin' && path === '/admin/map') return <Suspense fallback={T.loading}><MapEditor /></Suspense>;
+  if (me.role === 'admin' && path === '/admin/versions') return <Suspense fallback={T.loading}><Versions /></Suspense>;
   return <Lobby />;
 }
